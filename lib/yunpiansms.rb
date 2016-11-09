@@ -1,6 +1,6 @@
-require "yunpiansms/version"
-require "yunpiansms/sms_resources"
-require "yunpiansms/http_base"
+require 'yunpiansms/version'
+require 'yunpiansms/sms_resources'
+require 'yunpiansms/http_base'
 
 
 module Yunpiansms

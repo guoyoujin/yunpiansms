@@ -9,7 +9,6 @@ Gem::Specification.new do |spec|
   spec.authors       = ["trycatch"]
   spec.email         = ["guoyoujin123@gmail.com"]
   spec.summary       = ["trycatch"]
-  spec.summary       = %q{yunpian send sms Ruby Server SDK.}
   spec.description   = %q{yunpian send sms Ruby Server SDK.}
   spec.homepage      = "https://github.com/guoyoujin/xiaomipush."
   spec.license       = "MIT"
