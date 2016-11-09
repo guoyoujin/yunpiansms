@@ -5,11 +5,10 @@ require 'yunpiansms/http_base'
 
 module Yunpiansms
   class Service
-    attr_accessor :apikey, :signature, :connection_adapter,:debug_flg
+    attr_accessor :apikey, :connection_adapter,:debug_flg
 
-    def initialize(apikey: "", signature: "", connection_adapter: :net_http, debug_flg: false)
+    def initialize(apikey: "", connection_adapter: :net_http, debug_flg: false)
       @apikey = apikey
-      @signature = signature
       @connection_adapter = connection_adapter
       @debug_flg = debug_flg
     end
@@ -18,26 +17,26 @@ module Yunpiansms
       yield service = new; service
     end
 
-    def send_to(content, mobiles = nil, signature = nil)
-      http.post(Yunpiansms::SmsResources::SEND_URL,params_data(content, mobiles , signature))
+    def send_to(content, mobiles = nil)
+      http.post(Yunpiansms::SmsResources::SEND_URL,params_data(content, mobiles))
     end
 
-    def tpl_send_to(content, mobiles = nil, tpl_id = nil, tpl_value=nil, signature = nil)
-      http.post(Yunpiansms::SmsResources::TPL_SEND_URL,params_data_tpl(content, mobiles, tpl_id,tpl_value,signature))
+    def tpl_send_to(content, mobiles = nil, tpl_id = nil, tpl_value=nil)
+      http.post(Yunpiansms::SmsResources::TPL_SEND_URL,params_data_tpl(content, mobiles, tpl_id,tpl_value))
     end
 
     private
 
-    def params_data(content, mobiles, signature = nil)
+    def params_data(content, mobiles)
       content          = format_content(content,mobiles)
-      content[:text]   = "#{signature || @signature}#{content[:text]}"
+      content[:text]   = "#{format_tpl_value(content[:text])}"
       content
     end
 
-    def params_data_tpl(content, mobiles = nil, tpl_id = nil, tpl_value=nil, signature = nil)
+    def params_data_tpl(content, mobiles = nil, tpl_id = nil, tpl_value=nil)
       content               = format_content(content,mobiles)
       content[:tpl_id]      = tpl_id || content.detele(:tpl_id)
-      content[:tpl_value]   = "#{signature || @signature}#{content[:text]}"
+      content[:tpl_value]   = "#{format_tpl_value(content[:tpl_value])}"
       content
     end
 
@@ -62,6 +61,18 @@ module Yunpiansms
       params[:apikey] = params.delete(:apikey) || @apikey
       params[:mobile] = mobile_format(mobiles || params[:mobile])
       params
+    end
+
+    def format_tpl_value(tpl_value)
+      if tpl_value.is_a?(Hash)
+        tpl_value = parse_tpl_value(tpl_value)
+      else
+        tpl_value
+      end
+    end
+
+    def parse_tpl_value tpl_value
+      tpl_value.map { |k, v| "##{k}#=#{v}" }.join('&')
     end
   end
 end
