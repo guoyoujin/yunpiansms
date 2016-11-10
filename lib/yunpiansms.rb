@@ -35,7 +35,7 @@ module Yunpiansms
 
     def params_data_tpl(content, mobiles = nil, tpl_id = nil, tpl_value=nil)
       content               = format_content(content,mobiles)
-      content[:tpl_id]      = tpl_id || content.detele(:tpl_id)
+      content[:tpl_id]      = tpl_id || content.delete(:tpl_id)
       content[:tpl_value]   = "#{format_tpl_value(content[:tpl_value])}"
       content
     end
