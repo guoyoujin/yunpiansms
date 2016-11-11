@@ -25,6 +25,10 @@ module Yunpiansms
       http.post(Yunpiansms::SmsResources::TPL_SEND_URL,params_data_tpl(content, mobiles, tpl_id,tpl_value))
     end
 
+    def get_record(options={})
+      http.post(Yunpiansms::SmsResources::GET_URL,format_content(options))
+    end
+
     private
 
     def params_data(content, mobiles)

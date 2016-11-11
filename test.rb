@@ -26,3 +26,5 @@ content = {
   uid:    "15279"
 }
 result = @yunpiansms_service.send_to(content,"")
+
+result = @yunpiansms_service.get_record({})
